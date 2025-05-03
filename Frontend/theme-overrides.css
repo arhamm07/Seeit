@@ -1,0 +1,101 @@
+/* Theme Overrides for Seeit UI
+ * This file contains style overrides to match the new theme
+ * without changing the core functionality
+ */
+
+/* Dropdown Menu Styling */
+.dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: var(--border-radius-md) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: var(--shadow-lg) !important;
+    padding: 8px 0 !important;
+    min-width: 150px !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+}
+
+.dropdown-item {
+    padding: 8px 16px !important;
+    cursor: pointer !important;
+    color: var(--secondary-dark) !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(52, 152, 219, 0.1) !important;
+    color: var(--primary-color) !important;
+}
+
+.dropdown-item.active {
+    background-color: rgba(52, 152, 219, 0.2) !important;
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+}
+
+/* Webcam Controls Styling */
+.webcam-controls {
+    position: absolute !important;
+    bottom: 15px !important;
+    left: 0 !important;
+    right: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    padding: 10px !important;
+    z-index: 10 !important;
+}
+
+.capture-btn {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: var(--border-radius-md) !important;
+    padding: 10px 20px !important;
+    cursor: pointer !important;
+    font-size: var(--font-size-sm) !important;
+    font-weight: 600 !important;
+    box-shadow: var(--shadow-md) !important;
+    transition: all var(--transition-normal) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.capture-btn::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+    transition: var(--transition-fast) !important;
+}
+
+.capture-btn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4) !important;
+}
+
+.capture-btn:hover::before {
+    left: 100% !important;
+}
+
+.capture-btn:active {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 8px rgba(52, 152, 219, 0.3) !important;
+}
+
+/* Spacing for the capture button icon */
+.capture-btn i {
+    margin-right: 5px !important;
+}
+
+/* Font Size Adjustments */
+.font-small, .font-medium, .font-large {
+    transition: font-size 0.3s ease !important;
+}

@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: seeit-backend
+    env: python
+    buildCommand: pip install -r Backend/requirements.txt
+    startCommand: cd Backend && python main.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+    plan: free

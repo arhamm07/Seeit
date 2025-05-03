@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seeit Admin - Feedback Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --success-color: #4CAF50;
+            --danger-color: #F44336;
+            --light-bg: #f8f9fa;
+            --dark-text: #333;
+            --light-text: #888;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        h1, h2, h3 {
+            font-weight: 600;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-btn {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .positive {
+            color: var(--success-color);
+        }
+        
+        .negative {
+            color: var(--danger-color);
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .timestamp {
+            font-size: 0.85rem;
+            color: var(--light-text);
+        }
+        
+        .export-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .export-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .feedback-details {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            white-space: pre-wrap;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        
+        .pagination button {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+        }
+        
+        .pagination button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="loginForm" class="login-container">
+        <h2>Admin Login</h2>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter password">
+        </div>
+        <button id="loginBtn">Login</button>
+        <p id="loginError" style="color: red; margin-top: 1rem; display: none;">Invalid username or password</p>
+    </div>
+
+    <!-- Dashboard (hidden by default) -->
+    <div id="dashboard" class="hidden">
+        <header>
+            <div class="logo">Seeit Admin Dashboard</div>
+            <button id="logoutBtn">Logout</button>
+        </header>
+        
+        <div class="container">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Feedback</h3>
+                    <div id="totalFeedback" class="value">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Positive Feedback</h3>
+                    <div id="positiveFeedback" class="value">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Negative Feedback</h3>
+                    <div id="negativeFeedback" class="value">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Satisfaction Rate</h3>
+                    <div id="satisfactionRate" class="value">0%</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Feedback List</h2>
+                    <button id="exportBtn" class="export-btn">
+                        <i class="fas fa-download"></i> Export CSV
+                    </button>
+                </div>
+                
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">All Feedback</button>
+                    <button class="filter-btn" data-filter="positive">Positive Only</button>
+                    <button class="filter-btn" data-filter="negative">Negative Only</button>
+                </div>
+                
+                <table id="feedbackTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Prompt</th>
+                            <th>Language</th>
+                            <th>Rating</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedbackList">
+                        <!-- Feedback items will be inserted here -->
+                    </tbody>
+                </table>
+                
+                <div class="pagination" id="pagination">
+                    <!-- Pagination buttons will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loginForm = document.getElementById('loginForm');
+        const dashboard = document.getElementById('dashboard');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loginError = document.getElementById('loginError');
+        const username = document.getElementById('username');
+        const password = document.getElementById('password');
+        const totalFeedback = document.getElementById('totalFeedback');
+        const positiveFeedback = document.getElementById('positiveFeedback');
+        const negativeFeedback = document.getElementById('negativeFeedback');
+        const satisfactionRate = document.getElementById('satisfactionRate');
+        const feedbackList = document.getElementById('feedbackList');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const exportBtn = document.getElementById('exportBtn');
+        const pagination = document.getElementById('pagination');
+        
+        // Variables
+        let allFeedback = [];
+        let currentFilter = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        
+        // Login functionality
+        loginBtn.addEventListener('click', () => {
+            if (username.value === 'admin' && password.value === 'seeit2025') {
+                loginForm.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                fetchFeedback();
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+        
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            dashboard.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+            loginError.style.display = 'none';
+            username.value = '';
+            password.value = '';
+        });
+        
+        // Fetch feedback data from the backend
+        function fetchFeedback() {
+            // Create Basic Auth header
+            const headers = new Headers();
+            headers.set('Authorization', 'Basic ' + btoa('admin:seeit2025'));
+            
+            fetch('/api/admin/feedback', {
+                method: 'GET',
+                headers: headers
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    allFeedback = data.feedback;
+                    updateStats();
+                    applyFilter(currentFilter);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching feedback:', error);
+                alert('Error fetching feedback data. Please try again.');
+            });
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const total = allFeedback.length;
+            const positive = allFeedback.filter(item => item.rating === 'positive').length;
+            const negative = allFeedback.filter(item => item.rating === 'negative').length;
+            const rate = total > 0 ? Math.round((positive / total) * 100) : 0;
+            
+            totalFeedback.textContent = total;
+            positiveFeedback.textContent = positive;
+            negativeFeedback.textContent = negative;
+            satisfactionRate.textContent = `${rate}%`;
+        }
+        
+        // Apply filter to feedback list
+        function applyFilter(filter) {
+            currentFilter = filter;
+            currentPage = 1;
+            
+            // Update active filter button
+            filterBtns.forEach(btn => {
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Filter feedback items
+            let filteredFeedback = allFeedback;
+            if (filter === 'positive') {
+                filteredFeedback = allFeedback.filter(item => item.rating === 'positive');
+            } else if (filter === 'negative') {
+                filteredFeedback = allFeedback.filter(item => item.rating === 'negative');
+            }
+            
+            // Sort by timestamp (newest first)
+            filteredFeedback.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            // Update pagination
+            updatePagination(filteredFeedback.length);
+            
+            // Display feedback items for current page
+            displayFeedback(filteredFeedback);
+        }
+        
+        // Display feedback items
+        function displayFeedback(filteredFeedback) {
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedFeedback = filteredFeedback.slice(startIndex, endIndex);
+            
+            // Clear existing items
+            feedbackList.innerHTML = '';
+            
+            // Add feedback items
+            if (paginatedFeedback.length === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = `<td colspan="5" style="text-align: center;">No feedback found</td>`;
+                feedbackList.appendChild(emptyRow);
+            } else {
+                paginatedFeedback.forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    // Format date
+                    const date = new Date(item.timestamp);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    
+                    // Truncate prompt if too long
+                    const truncatedPrompt = item.prompt.length > 50 
+                        ? item.prompt.substring(0, 50) + '...' 
+                        : item.prompt;
+                    
+                    row.innerHTML = `
+                        <td class="timestamp">${formattedDate}</td>
+                        <td>${truncatedPrompt}</td>
+                        <td>${item.language}</td>
+                        <td class="${item.rating}">${item.rating}</td>
+                        <td>
+                            <button class="view-btn" data-id="${item.id}">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                        </td>
+                    `;
+                    
+                    feedbackList.appendChild(row);
+                    
+                    // Add event listener to view button
+                    const viewBtn = row.querySelector('.view-btn');
+                    viewBtn.addEventListener('click', () => {
+                        // Check if details are already shown
+                        const nextRow = row.nextElementSibling;
+                        if (nextRow && nextRow.classList.contains('details-row')) {
+                            nextRow.remove();
+                            return;
+                        }
+                        
+                        // Create details row
+                        const detailsRow = document.createElement('tr');
+                        detailsRow.classList.add('details-row');
+                        detailsRow.innerHTML = `
+                            <td colspan="5">
+                                <div class="feedback-details">
+                                    <strong>Prompt:</strong> ${item.prompt}
+                                    <br><br>
+                                    <strong>Response:</strong> ${item.response}
+                                    ${item.comment ? `<br><br><strong>Comment:</strong> ${item.comment}` : ''}
+                                </div>
+                            </td>
+                        `;
+                        
+                        // Insert after current row
+                        row.parentNode.insertBefore(detailsRow, row.nextSibling);
+                    });
+                });
+            }
+        }
+        
+        // Update pagination controls
+        function updatePagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            pagination.innerHTML = '';
+            
+            if (totalPages <= 1) {
+                return;
+            }
+            
+            // Add previous button
+            const prevBtn = document.createElement('button');
+            prevBtn.innerHTML = '&laquo; Prev';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    applyFilter(currentFilter);
+                }
+            });
+            pagination.appendChild(prevBtn);
+            
+            // Add page buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                if (i === currentPage) {
+                    pageBtn.classList.add('active');
+                }
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    applyFilter(currentFilter);
+                });
+                pagination.appendChild(pageBtn);
+            }
+            
+            // Add next button
+            const nextBtn = document.createElement('button');
+            nextBtn.innerHTML = 'Next &raquo;';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    applyFilter(currentFilter);
+                }
+            });
+            pagination.appendChild(nextBtn);
+        }
+        
+        // Filter button event listeners
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                applyFilter(btn.dataset.filter);
+            });
+        });
+        
+        // Export to CSV functionality
+        exportBtn.addEventListener('click', () => {
+            // Filter feedback based on current filter
+            let dataToExport = allFeedback;
+            if (currentFilter === 'positive') {
+                dataToExport = allFeedback.filter(item => item.rating === 'positive');
+            } else if (currentFilter === 'negative') {
+                dataToExport = allFeedback.filter(item => item.rating === 'negative');
+            }
+            
+            // Create CSV content
+            let csvContent = 'data:text/csv;charset=utf-8,';
+            csvContent += 'Timestamp,Language,Rating,Prompt,Response\n';
+            
+            dataToExport.forEach(item => {
+                const row = [
+                    item.timestamp,
+                    item.language,
+                    item.rating,
+                    `"${item.prompt.replace(/"/g, '""')}"`,
+                    `"${item.response.replace(/"/g, '""')}"`
+                ];
+                csvContent += row.join(',') + '\n';
+            });
+            
+            // Create download link
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `seeit-feedback-${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            
+            // Trigger download
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
+</body>
+</html>
